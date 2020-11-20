@@ -1,0 +1,54 @@
+<!--
+    28 Sep 2020
+    - Switch to ListPicker for NS7
+    10 June 2020
+    - Switched Couchbase plugin
+    29 April 2020
+
+    List of Scanned Barcode.
+    - Todo: Add swipe to delete
+    - Try using RadListView.
+
+-->
+
+<Page
+    navigatingTo="onNavigatingTo" 
+    loaded="onLoaded" 
+    xmlns="http://schemas.nativescript.org/tns.xsd" 
+    xmlns:lv="nativescript-ui-listview">
+
+    <ActionBar>
+        <!-- <NavigationButton tap="pullHraDatabase" android.systemIcon="ic_menu_back"/> -->
+        <Label text="HRA Listing" ></Label>
+    </ActionBar>
+
+    <StackLayout>
+
+        <GridLayout rows="auto" columns="*,*" class="m-t-5 m-l-5" backgroundColor="yellow" >
+            <Label col="0" verticalAlignment="center" text="Search property:" ></Label>
+            <Button col="1" text="{{ searchDisplay }}" tap="{{ onSearchProperty }}" />
+        </GridLayout>
+
+        <SearchBar id="searchBarId" hint="{{ searchHint }}" text="{{ searchPhrase }}" submit="{{ onSearchSubmit }}"
+            clear="{{ onClear }}" loaded="searchbar loaded" class="search-bar" /> 
+
+        <Button class="primary -rounded-lg" text="Destroy HRA Database" backgroundColor="yellow" tap="{{ destroyHraDatabase }}" visibility="collapse"/>
+        <Button class="primary -rounded-lg" text="Pull HRA Listing" backgroundColor="lightgreen" tap="{{ pullHraDatabase }}"/>
+            
+        <lv:RadListView id="list-view" class="list-group" height="500" items="{{ items }}" filteringFunction="{{ filter }}">
+            <lv:RadListView.listViewLayout>
+            	<lv:ListViewLinearLayout scrollDirection="Vertical" />
+			</lv:RadListView.listViewLayout>
+            <lv:RadListView.itemTemplate>
+                <GridLayout class="list-group-item -separator" rows="*,*,*" columns="auto,auto">
+                    <Label row="0" col="0" text="Property Tag:" />
+                    <Label row="0" col="1" text="{{ PROP_ID }}" />
+                    <Label row="1" col="0" text="Description:" />
+                    <Label row="1" col="1" text="{{ CATALOG_NOMENCLATURE }}" />
+                    <Label row="2" col="0" text="Serial Number:" />
+                    <Label row="2" col="1" text="{{ PROP_SERIAL_NO }}" />
+                </GridLayout>
+            </lv:RadListView.itemTemplate>
+        </lv:RadListView>
+    </StackLayout>
+</Page>

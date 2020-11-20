@@ -1,0 +1,48 @@
+{
+  "name": "@nativescript/template-tab-navigation-ts",
+  "main": "app.js",
+  "displayName": "Tabs",
+  "templateType": "App template",
+  "version": "7.0.3",
+  "description": "NativeScript Application",
+  "author": "NativeScript Team <oss@nativescript.org>",
+  "license": "SEE LICENSE IN <your-license-filename>",
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "nstudio",
+    "nativescript",
+    "mobile",
+    "{N}",
+    "tns",
+    "template",
+    "tab",
+    "navigation",
+    "category-general"
+  ],
+  "repository": "<fill-your-repository-here>",
+  "homepage": "https://github.com/NativeScript/nativescript-app-templates",
+  "bugs": {
+    "url": "https://github.com/NativeScript/NativeScript/issues"
+  },
+  "scripts": {
+    "lint": "tslint \"app/**/*.ts\""
+  },
+  "dependencies": {
+    "@nativescript/core": "~7.0.0",
+    "@nativescript/theme": "~2.3.0",
+    "nativescript-barcodescanner": "^4.0.1",
+    "nativescript-couchbase-plugin": "^0.9.6",
+    "nativescript-ui-listview": "^9.0.4"
+  },
+  "devDependencies": {
+    "@nativescript/android": "7.0.1",
+    "@nativescript/webpack": "~3.0.0",
+    "node-sass": "^4.14.1",
+    "tslint": "~6.1.3",
+    "typescript": "~3.9.0"
+  },
+  "private": "true",
+  "readme": "NativeScript Application"
+}

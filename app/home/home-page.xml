@@ -1,0 +1,79 @@
+<!--
+    17 Nov 2020
+    - Switch to use of dialogs
+    28 Sep 2020
+    - Switch to ListPicker
+    25 July 2020
+    - Added ActivityIndicator
+    20 July 2020
+    - Changed name to a textfield and tweeked margin.
+    23 June 2002
+    - Show HRA Item Count
+    - Trying to make sure all db's load and sync
+    - Get HRA to load from profile
+    home-page.xml
+    7 May 2020
+
+    Added ListPicker for Locations and Scanning
+
+-->
+<Page
+    navigatingTo="onNavigatingTo"  
+    xmlns="http://schemas.nativescript.org/tns.xsd">
+
+    <ActionBar>
+        <Label text="Home" />
+    </ActionBar>
+
+    <ScrollView>
+    <StackLayout class="form">
+        <Label text="{{ versionId }}" textAlignment="center" class="h2" />
+
+        <GridLayout rows="auto,auto,auto,auto" columns="*,*" textAlignment="left">
+            <Label row="0" col="0" colSpan="2" text="Profile" backgroundColor="lightblue" textDecoration="underline" class="h2" />
+            <Label row="1" col="0" text="Name:" />
+
+            <!-- textChange="{{ updateProfile }}" or returnPress ?? or ?? Using textChange something happens every keypress -->
+            <TextField row="1" col="1" class="m-0" hint="Enter your name" textAlignment="left" text="{{ profileName }}"
+                returnPress="{{ onProfile }}" autocapitalizationType="words" backgroundColor="Cyan" />
+
+            <Label row="2" col="0" text="UUID:" />
+            <Label row="2" col="1" text="{{ profile.UUID }}" />
+            <Label row="3" col="0" verticalAlignment="center" text="Default Location:" />
+            <Button row="3" col="1" text="{{ defaultLocation }}" tap="{{ onDefaultLocation }}"/>
+        </GridLayout>
+
+        <GridLayout rows="auto,auto,auto,auto" columns="*,*">
+            <Label row="0" col="0" colSpan="2" text="Property Account Information" backgroundColor="lightblue" textDecoration="underline" class="h2" />
+            <Label row="1" col="0" text="Hand Receipt Holder: " />
+            <Label row="1" col="1" text="{{ hra.hraHolder }}" />
+            <Label row="2" col="0" text="HRA #:" />
+            <Label row="2" col="1" text="{{ hra.hraNumber }}" />
+            <Label row="3" col="0" text="HRA Item Count:" />
+            <Label row="3" col="1" text="{{ hraLength }}" />
+        </GridLayout>
+        
+        <ActivityIndicator busy="{{ isBusy }}" loaded="indicatorLoaded"/>
+
+        <GridLayout rows="auto, auto,auto" columns="*">
+            <Label row="0" col="0" text="Defaults" backgroundColor="lightblue" textDecoration="underline" class="h2" />
+            <Label row="1" col="0" text="Property Tags Only?" verticalAlignment="center" />
+            <Switch row="1" col="0" checked="true" horizontalAlignment="center" />
+        </GridLayout>
+
+        <GridLayout rows="auto,auto,auto,auto,auto" columns="*,*">
+            <Label row="0" col="0" colSpan="2" text="Statis" backgroundColor="lightblue" textDecoration="underline" class="h2" />
+            <Label row="1" col="0" text="Connection:" />
+            <Label row="1" col="1" text="{{ connectionType }}" />
+            <Label row="2" col="0" text="Sync Gateway:" />
+            <Label row="2" col="1" text="{{ sgwState }}" />
+            <Label row="3" col="0" text="Device UUID:" />
+            <Label row="3" col="1" text="{{ uuid }}" />
+            <Label row="4" col="0" text="Scanned Records:" />
+            <Label row="4" col="1" text="{{ scannedLength }}" />
+        </GridLayout>
+        
+        <Button text="Update Profile" tap="{{ onProfile }}" backgroundColor="Cyan" class="-prmary -active -rounded-lg" />
+    </StackLayout>
+    </ScrollView>
+</Page>

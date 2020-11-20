@@ -1,0 +1,65 @@
+<!--
+    19 June 2020
+    - Added cicle-check font and background check for isHra
+    10 June 2020
+    - Switched Couchbase plugin
+    
+    29 April 2020
+    List of Scanned Barcode.
+    - Todo: Add swipe to delete
+    - Try using RadListView. Working!
+    - Try to get list to load without button press
+-->
+
+<Page
+    navigatingTo="onNavigatingTo"
+    xmlns="http://schemas.nativescript.org/tns.xsd"    
+    xmlns:lv="nativescript-ui-listview">
+
+    <ActionBar>
+        <Label text="Scan Results"></Label>
+    </ActionBar>
+
+        <StackLayout>
+
+            <Button class="primary -rounded-lg" text="Destroy Scan Database" backgroundColor="yellow" tap="{{ destroyScanDatabase }}" visibility="collapse"/>
+            <Button class="primary -rounded-lg" text="Pull Scan Results" backgroundColor="lightgreen" tap="{{ getScanDatabase }}"/>
+
+            <!-- class"list-group" -->
+            <lv:RadListView id="list-view" height="500" items="{{ scannedDocuments }}" 
+                swipeActions="true" selectionBehavior="None" itemSwipeProgressStarted="onSwipeCellStarted">
+                <lv:RadListView.listViewLayout>
+				    <lv:ListViewLinearLayout scrollDirection="Vertical" />
+			    </lv:RadListView.listViewLayout>
+                <lv:RadListView.headerItemTemplate>
+                    <GridLayout class="-seperator font-weight-bold" rows="auto" columns="auto,auto,auto,*">
+                        <Label row="0" col="0" class="far" text="On HRA &#xf058;" />
+                        <Label row="0" col="1" text="Barcode" />
+                        <Label row="0" col="2" text="Format" />
+                        <Label row="0" col="3" text="Location" />
+                    </GridLayout>
+                </lv:RadListView.headerItemTemplate>
+                <lv:RadListView.itemTemplate>
+                    <!-- class"list-group-item" -->
+                    <GridLayout class="-seperator" rows="auto" columns="auto,auto,auto,*" backgroundColor="{{ isHra ? 'lightblue' : 'transparent' }}" >
+                        <Label row="0" col="0" class="far" text="{{ isHra ? '&#xf058;' : '' }}" />
+                        <Label row="0" col="1" text="{{ Barcode }}" />
+                        <Label row="0" col="2" text="{{ Format }}" />
+                        <Label row="0" col="3" text="{{ Location }}" />
+                    </GridLayout>
+                </lv:RadListView.itemTemplate>
+                <lv:RadListView.itemSwipeTemplate>
+                    <GridLayout columns="auto,*,auto">
+                        <StackLayout col="0" class="save-btn" tap="onLeftSwipe" orientation="horizontal">
+                            <Label text="Save" verticalAlignment="center" horizontalAlignment="center" />
+                        </StackLayout>
+                        <StackLayout col="2" class="delete-btn" tap="onRightSwipe" orientation="horizontal">
+                            <Label text="Delete" verticalAlignment="center" horizontalAlignment="center" />
+                        </StackLayout>
+                    </GridLayout>
+                </lv:RadListView.itemSwipeTemplate>
+            </lv:RadListView>
+
+        </StackLayout>
+
+</Page>

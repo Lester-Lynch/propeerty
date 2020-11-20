@@ -1,0 +1,71 @@
+<!--
+    28 Sep 2020
+    - Switch to ListPicker for NS7
+    19 June 2020
+    - Added circle-check font and check for isHra
+    - Trying to create manual header
+    10 June 2020
+    - Switched Couchbase plugin
+    20 May 2020
+    - Added isManual check for Manual input
+    28 April 2020
+    - Added Barcode screen.
+    - Added button for manual entry of barcode
+    - Try using RadListView.
+        - Basic layout works by just changing listview tags to ListView
+        - Having problems when scanning a barcode
+    - Returned to regular list-view
+    - Switched to Tab template
+-->
+
+<Page
+    navigatingTo="onNavigatingTo"
+    xmlns="http://schemas.nativescript.org/tns.xsd"
+    xmlns:Barcode="nativescript-barcodescanner">
+
+    <ActionBar>
+        <Label text="Scan Barcodes"></Label>
+         <ActionItem
+            ios.systemIcon="16" ios.position="right"
+            text="Scanner" android.position="popup">
+        </ActionItem>
+        <ActionItem tap="onLocation"
+            ios.systemIcon="16" ios.position="right"
+            text="Location" android.position="popup">
+        </ActionItem>
+    </ActionBar>
+
+    <StackLayout>
+        <GridLayout rows="auto" columns="*,*" class="m-t-5 m-l-5" backgroundColor="yellow" >
+            <Label col="0" fontSize="20" text="Locations:" ></Label>
+            <ListPicker items="{{ locations.Names }}" selectedIndex="{{ locationsIndex }}" />
+        </GridLayout>
+
+        <TextField hint="Manual Barcode Entry" autocapitalizationType="allcharacters" backgroundColor="lightblue" maxLength="5" 
+            class="nt-input -border -m-x-10" returnKeyType="Done" returnPress="{{ addItem }}" text="{{ newItem }}" 
+            visibility="{{ isManual ? 'visible' : 'collapse' }}" isEnabled="{{ isManual }}" />
+
+        <Button class="primary -rounded-lg" backgroundColor="lightgreen" text="Scan Barcodes" tap="{{ scanBarcode }}"/>
+
+        <!-- f00c check class fas, f058 circle-check class far or fas, f02a barcode class fas, class="fas or far" -->
+        <GridLayout class="-seperator font-weight-bold" rows="auto" columns="*,*,*,*" >
+            <Label row="0" col="0" text="isHra &#xf058;" class="far" />
+            <!-- Image row="0" col="0" src"font://&#xf00c;" class="fas m-l-5" / -->
+            <Label row="0" col="1" text="Barcode"/>
+            <Label row="0" col="2" text="Format" />
+            <Label row="0" col="3" text="Location" />
+        </GridLayout>
+
+        <ListView id="list-view" class="list-group" height="500" items="{{ items }}">
+            <ListView.itemTemplate>
+                <!-- class="list-group-item" -->
+                <GridLayout rows="auto" columns="*,*,*,*" backgroundColor="{{ isHra ? 'lightblue' : 'transparent' }}" >
+                    <Label row="0" col="0" class="far" text="{{ isHra ? '&#xf058;' : '' }}" />
+                    <Label row="0" col="1" text="{{ Barcode }}" />
+                    <Label row="0" col="2" text="{{ Format }}" />
+                    <Label row="0" col="3" text="{{ Location }}" />
+                </GridLayout>
+            </ListView.itemTemplate>
+        </ListView>
+    </StackLayout>
+</Page>
