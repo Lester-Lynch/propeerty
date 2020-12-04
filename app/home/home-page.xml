@@ -40,7 +40,7 @@
             <Label row="2" col="0" text="UUID:" />
             <Label row="2" col="1" text="{{ profile.UUID }}" />
             <Label row="3" col="0" verticalAlignment="center" text="Default Location:" />
-            <Button row="3" col="1" text="{{ defaultLocation }}" tap="{{ onDefaultLocation }}"/>
+            <Button row="3" col="1" text="{{ profile.defaultLocation }}" tap="{{ onDefaultLocation }}"/>
         </GridLayout>
 
         <GridLayout rows="auto,auto,auto,auto" columns="*,*">

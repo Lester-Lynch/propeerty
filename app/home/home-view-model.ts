@@ -59,7 +59,7 @@ export class HomeViewModel extends Observable {
     isNew = false;              // New Profile
     isBusy = true;              // Activity indicator
 
-    @ObservableProperty() versionId = "PropEERTy 19Nov20 1615";
+    @ObservableProperty() versionId = "PropEERTy 2Dec20 1915";
 
     @ObservableProperty() connectionType = "None";
     @ObservableProperty() sgwState = "unknown";
@@ -71,16 +71,16 @@ export class HomeViewModel extends Observable {
     @ObservableProperty() hraLength = 0;
 
     // define propeerty database document format
-    @ObservableProperty() profile = { "type": "Profile", "UUID": this.uuid, "Name": null, "HRA": "949", "defaultLocation": "Alexandria" };
+    @ObservableProperty() profile = { "type": "Profile", "UUID": this.uuid, "Name": "Name", "HRA": "949", "defaultLocation": "Alexandria" };
     @ObservableProperty() hra = { "type": "string", "hraNumber": "string", "hraHolder": "string" };
-    @ObservableProperty() locations = { "type": "string", "Names": "Array<string>" };
+    @ObservableProperty() locations = { "type": "string", "Names": ["Array<string>"] };
 
     constructor() {
         super();
 
         this.propeertyDatabase = new Couchbase("propeerty-database");
         // var syncPropeerty = this.propeertyDatabase.createReplication("ws://eert-dev.ddns.net:4984/propeerty", "both");
-        var syncPropeerty = this.propeertyDatabase.createReplication("wss://192.168.0.13:4984/propeerty", "both");
+        var syncPropeerty = this.propeertyDatabase.createReplication("ws://192.168.0.13:4984/propeerty", "both");
         // pullPropeerty.setUserNameAndPassword("sync_gateway", "password")
         syncPropeerty.setContinuous(true);
         syncPropeerty.start();
@@ -96,7 +96,7 @@ export class HomeViewModel extends Observable {
         // Scan results database with sync
         this.scannedDatabase = new Couchbase("scanned-database");
         // var syncScanned = this.scannedDatabase.createReplication("ws://eert-dev.ddns.net:4984/scanned", "both");
-        var syncScanned = this.scannedDatabase.createReplication("wss://192.168.0.13:4984/scanned", "both");
+        var syncScanned = this.scannedDatabase.createReplication("ws://192.168.0.13:4984/scanned", "both");
         syncScanned.setContinuous(true);
         syncScanned.start();
 
@@ -125,9 +125,9 @@ export class HomeViewModel extends Observable {
             await this.getSgwState();
         }
 
-        // await this.getPropEERTy();
-        // await this.getScanned();
-        // await this.getHra();
+        await this.getPropEERTy();
+        await this.getScanned();
+        await this.getHra();
 
         this.isBusy = false;
     }
@@ -223,6 +223,7 @@ export class HomeViewModel extends Observable {
             console.log("Home: propeerty length: " + propeertyDocuments.length);
             console.log("Loop: " + x++);
         } while ( propeertyDocuments.length == 0 );
+        
         console.log("Query End ---------------");
             
         console.log("Profile -------------------");
@@ -316,17 +317,15 @@ export class HomeViewModel extends Observable {
 
     onDefaultLocation() {
         console.log("onDefaultLocation: Dialogs");
+        console.log(this.locations.Names);
         Dialogs.action({
-            message: "Default Location",
-            cancelButtonText: "Cancel text",
-            actions: ["One", "Two"]
+            message: "Select default location",
+            cancelButtonText: "Cancel",
+            actions: this.locations.Names
         }).then(result => {
+            this.profile.defaultLocation = result;
             console.log("Dialog result: " + result);
-            if(result == "One"){
-                this.defaultLocation = "One";
-            }else if(result == "Two"){
-                this.defaultLocation = "Two";
-            }
+            console.log("Dialog defaultLocation " + this.profile.defaultLocation);
         });
     }
 

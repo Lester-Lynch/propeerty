@@ -32,19 +32,19 @@
 				    <lv:ListViewLinearLayout scrollDirection="Vertical" />
 			    </lv:RadListView.listViewLayout>
                 <lv:RadListView.headerItemTemplate>
-                    <GridLayout class="-seperator font-weight-bold" rows="auto" columns="auto,auto,auto,*">
+                    <GridLayout class="-seperator font-weight-bold" rows="auto" columns="*,*,*,*">
                         <Label row="0" col="0" class="far" text="On HRA &#xf058;" />
-                        <Label row="0" col="1" text="Barcode" />
-                        <Label row="0" col="2" text="Format" />
+                        <Label row="0" col="1" text="Date" />
+                        <Label row="0" col="2" text="Barcode" />
                         <Label row="0" col="3" text="Location" />
                     </GridLayout>
                 </lv:RadListView.headerItemTemplate>
                 <lv:RadListView.itemTemplate>
                     <!-- class"list-group-item" -->
-                    <GridLayout class="-seperator" rows="auto" columns="auto,auto,auto,*" backgroundColor="{{ isHra ? 'lightblue' : 'transparent' }}" >
+                    <GridLayout class="-seperator" rows="auto" columns="*,*,*,*" backgroundColor="{{ isHra ? 'lightblue' : 'transparent' }}" >
                         <Label row="0" col="0" class="far" text="{{ isHra ? '&#xf058;' : '' }}" />
-                        <Label row="0" col="1" text="{{ Barcode }}" />
-                        <Label row="0" col="2" text="{{ Format }}" />
+                        <Label row="0" col="1" text="{{ Date }}" />
+                        <Label row="0" col="2" text="{{ Barcode }}" />
                         <Label row="0" col="3" text="{{ Location }}" />
                     </GridLayout>
                 </lv:RadListView.itemTemplate>

@@ -1,4 +1,6 @@
 /* 
+  23 Nov 2020
+  - Location to use Button and Dialogs
   3 Sep 2020
   - Migrate to NS 7
   - Migrate to @nativescript/core
@@ -21,7 +23,8 @@
   Eddie Verbruggen found at https://github.com/EddyVerbruggen/nativescript-barcodescanner
 */ 
 
-import { Observable, ObservableArray, Device } from "@nativescript/core";
+import { Observable, ObservableArray, Device, Dialogs } from "@nativescript/core";
+import { ObservableProperty } from "../observable-property-decorator";
 import { BarcodeScanner } from "nativescript-barcodescanner";
 import { Couchbase } from "nativescript-couchbase-plugin";
 
@@ -48,14 +51,17 @@ export class ScanViewModel extends Observable {
 
   public profile = { "type": "string", "UUID": "string", "Name": "string", "HRA": "string", "defaultLocation": "string" };
   public hra = { "type": "string", "hraNumber": "string", "hraHolder": "string" };
-  public locations = { "type": "string", "Names": "Array<string>" };
+  public locations = { "type": "string", "Names": ["Array<string>"] };
   public scanDocument = { "id": "any", "isHra": "any", "Format": "any", "Barcode": "any", "UUID": "any", "Date": "any", "Location": "any" };
 
   public items: ObservableArray<Item>;
   newItem: string = '';
 
   public message: string;
+  // public location: string;
   private barcodeScanner: BarcodeScanner;
+
+  @ObservableProperty() location = "default"
 
   // Manual input defaults
   // public isVisible: string = "collapsed";  // visible, hidden, collapse
@@ -63,7 +69,7 @@ export class ScanViewModel extends Observable {
 
   private isHra: boolean;
 
-  private locationsIndex = 0;
+  // private locationsIndex = 0;
   private uuid = Device.uuid;
   private scanType = ["Inventory", "Any"]
 
@@ -84,7 +90,8 @@ export class ScanViewModel extends Observable {
     this.profile = this.propeertyDatabase.getDocument(this.uuid);
     this.hra = this.propeertyDatabase.getDocument("HRA");
     this.locations = this.propeertyDatabase.getDocument("Locations");
-    this.locationsIndex = this.locations.Names.indexOf(this.profile.defaultLocation);
+    // this.locationsIndex = this.locations.Names.indexOf(this.profile.defaultLocation);
+    this.location = this.profile.defaultLocation;
 
     // Scan results database with push sync
     this.scannedDatabase = new Couchbase("scanned-database");
@@ -95,13 +102,14 @@ export class ScanViewModel extends Observable {
 
     // HRA database local store and view
     this.hraDatabase = new Couchbase("hra-database");
-    var pullHra = this.hraDatabase.createPullReplication("ws://eert-dev.ddns.net:4984/hra949");
+    // var pullHra = this.hraDatabase.createPullReplication("ws://eert-dev.ddns.net:4984/hra949");   
+    var pullHra = this.hraDatabase.createPullReplication("ws://192.168.0.13:4984/hra949");
     pullHra.start();
 
   };
 
   addItem() {
-    this.items.push(new Item(true, this.newItem, "*Manual*", this.locations[this.locationsIndex]));
+    this.items.push(new Item(true, this.newItem, "*Manual*", this.location));
     this.set('newItem','');
   };
 
@@ -120,6 +128,21 @@ export class ScanViewModel extends Observable {
       beepOnScan: true,             // Play or Suppress beep on scan (default true)
       openSettingsIfPermissionWasPreviouslyDenied: true, // On iOS you can send the user to the settings app if access was previously denied
   */
+
+ onLocation() {
+  console.log("onLocation: Dialogs");
+  console.log(this.locations.Names);
+  Dialogs.action({
+      message: "Select scaning Location",
+      cancelButtonText: "Cancel",
+      actions: this.locations.Names
+  }).then(result => {
+      this.location = result;
+      console.log("Dialog location: " + this.location);
+      console.log("Dialog result: " + result);
+  });
+}
+
  
   public scanBarcode() {
     this.barcodeScanner.scan({
@@ -147,7 +170,7 @@ export class ScanViewModel extends Observable {
       };
             
       // Update array for scan-page tab display
-      this.items.push(new Item(this.isHra, result.text, result.format, this.locations.Names[this.locationsIndex]));
+      this.items.push(new Item(this.isHra, result.text, result.format, this.location));
 
       // Query this barcode
       console.log("Scan: Query Start ----------");
@@ -173,7 +196,7 @@ export class ScanViewModel extends Observable {
           "Barcode": result.text,
           "Format": result.format,
           "UUID": this.uuid,
-          "Location": this.locations.Names[this.locationsIndex],
+          "Location": this.location,
           "Date": new Date()
         })
         console.log("Scan: Updated document: " + result.text + " @ " + Date());
@@ -185,7 +208,7 @@ export class ScanViewModel extends Observable {
           "Barcode": result.text,
           "Format": result.format,
           "UUID": this.uuid,
-          "Location": this.locations.Names[this.locationsIndex],
+          "Location": this.location,
           "Date": new Date()
         }, result.text )
         console.log("Scan: Created new document: " + result.text + " @ " + Date());

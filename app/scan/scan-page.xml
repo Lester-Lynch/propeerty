@@ -1,4 +1,6 @@
 <!--
+    23 Nov 2020
+    - Use Button and Dialogs for Location
     28 Sep 2020
     - Switch to ListPicker for NS7
     19 June 2020
@@ -37,8 +39,8 @@
 
     <StackLayout>
         <GridLayout rows="auto" columns="*,*" class="m-t-5 m-l-5" backgroundColor="yellow" >
-            <Label col="0" fontSize="20" text="Locations:" ></Label>
-            <ListPicker items="{{ locations.Names }}" selectedIndex="{{ locationsIndex }}" />
+            <Label col="0" verticalAlignment="center" text="Locations:" ></Label>
+            <Button col="1" text="{{ location }}" tap="{{ onLocation }}"/>
         </GridLayout>
 
         <TextField hint="Manual Barcode Entry" autocapitalizationType="allcharacters" backgroundColor="lightblue" maxLength="5" 
@@ -50,9 +52,8 @@
         <!-- f00c check class fas, f058 circle-check class far or fas, f02a barcode class fas, class="fas or far" -->
         <GridLayout class="-seperator font-weight-bold" rows="auto" columns="*,*,*,*" >
             <Label row="0" col="0" text="isHra &#xf058;" class="far" />
-            <!-- Image row="0" col="0" src"font://&#xf00c;" class="fas m-l-5" / -->
-            <Label row="0" col="1" text="Barcode"/>
-            <Label row="0" col="2" text="Format" />
+            <Label row="0" col="1" text="Date" />
+            <Label row="0" col="2" text="Barcode"/>
             <Label row="0" col="3" text="Location" />
         </GridLayout>
 
@@ -61,8 +62,8 @@
                 <!-- class="list-group-item" -->
                 <GridLayout rows="auto" columns="*,*,*,*" backgroundColor="{{ isHra ? 'lightblue' : 'transparent' }}" >
                     <Label row="0" col="0" class="far" text="{{ isHra ? '&#xf058;' : '' }}" />
-                    <Label row="0" col="1" text="{{ Barcode }}" />
-                    <Label row="0" col="2" text="{{ Format }}" />
+                    <Label row="0" col="1" text="{{ Date }}" />
+                    <Label row="0" col="2" text="{{ Barcode }}" />
                     <Label row="0" col="3" text="{{ Location }}" />
                 </GridLayout>
             </ListView.itemTemplate>
